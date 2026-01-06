@@ -96,10 +96,12 @@
 
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sales-table {
   width: 100%;
+  min-width: 900px; // Ensure table doesn't squish on mobile
   
   th {
     background: #f9fafb;
@@ -153,22 +155,28 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
-  &.status-pending {
+  &.status-new {
     background: #f3f4f6;
-    color: #6b7280;
-    border-color: #d1d5db;
+    color: #9E9E9E;
+    border-color: #9E9E9E;
   }
 
-  &.status-confirmed {
+  &.status-closed {
     background: #d1fae5;
-    color: #065f46;
-    border-color: #10b981;
+    color: #4CAF50;
+    border-color: #4CAF50;
   }
 
-  &.status-rejected {
-    background: #fee2e2;
-    color: #991b1b;
-    border-color: #ef4444;
+  &.status-reference {
+    background: #dbeafe;
+    color: #2196F3;
+    border-color: #2196F3;
+  }
+
+  &.status-nurturing {
+    background: #ffedd5;
+    color: #FF9800;
+    border-color: #FF9800;
   }
 }
 

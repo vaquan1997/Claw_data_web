@@ -31,35 +31,32 @@ export class SalesTableComponent {
 
   searchQuery = signal('');
   displayedColumns: string[] = [
-    'orderCode',
     'customerName',
+    'phone',
     'productName',
     'quantity',
     'unitPrice',
     'totalPrice',
     'createdAt',
-    'paymentMethod',
-    'saleStatus',
     'noteStatus'
   ];
 
   columnHeaders: { [key: string]: string } = {
-    orderCode: 'Mã đơn',
-    customerName: 'Khách hàng',
+    customerName: 'Tên khách hàng',
+    phone: 'Số điện thoại',
     productName: 'Sản phẩm',
     quantity: 'Số lượng',
     unitPrice: 'Đơn giá',
     totalPrice: 'Thành tiền',
     createdAt: 'Ngày tạo',
-    paymentMethod: 'Thanh toán',
-    saleStatus: 'Trạng thái sale',
-    noteStatus: 'Tình trạng chốt'
+    noteStatus: 'Trạng thái chăm sóc'
   };
 
   statusOptions: { value: NoteStatus; label: string; color: string }[] = [
-    { value: 'pending', label: 'Chưa chốt', color: 'gray' },
-    { value: 'confirmed', label: 'Đã chốt', color: 'green' },
-    { value: 'rejected', label: 'Chưa mua', color: 'red' }
+    { value: 'new', label: 'Khách mới', color: '#9E9E9E' },
+    { value: 'closed', label: 'Đã chốt', color: '#4CAF50' },
+    { value: 'reference', label: 'Tham khảo', color: '#2196F3' },
+    { value: 'nurturing', label: 'Chăm sóc', color: '#FF9800' }
   ];
 
   pageSizeOptions = [10, 25, 50, 100];
@@ -93,11 +90,17 @@ export class SalesTableComponent {
 
   getStatusBadgeClass(status: NoteStatus): string {
     const statusMap: { [key in NoteStatus]: string } = {
-      pending: 'status-pending',
-      confirmed: 'status-confirmed',
-      rejected: 'status-rejected'
+      new: 'status-new',
+      closed: 'status-closed',
+      reference: 'status-reference',
+      nurturing: 'status-nurturing'
     };
-    return statusMap[status] || 'status-pending';
+    return statusMap[status] || 'status-new';
+  }
+
+  getStatusColor(status: NoteStatus): string {
+    const option = this.statusOptions.find(opt => opt.value === status);
+    return option?.color || '#9E9E9E';
   }
 
   getPaymentMethodLabel(method: string): string {

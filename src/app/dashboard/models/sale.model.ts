@@ -1,10 +1,11 @@
-export type NoteStatus = 'pending' | 'confirmed' | 'rejected';
+export type NoteStatus = 'new' | 'closed' | 'reference' | 'nurturing';
 export type PaymentMethod = 'cash' | 'card' | 'transfer' | 'cod';
 
 export interface SaleOrder {
   id: string;
   orderCode: string;
   customerName: string;
+  phone: string;
   productName: string;
   quantity: number;
   unitPrice: number;

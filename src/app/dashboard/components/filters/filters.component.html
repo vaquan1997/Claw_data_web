@@ -1,0 +1,67 @@
+<div class="filters-container">
+  <div class="filter-row">
+    <!-- Search Box -->
+    <div class="filter-group search-group">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Tìm kiếm</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Tên khách hàng hoặc số điện thoại"
+          [value]="searchQuery()"
+          (input)="onSearchChange($any($event.target).value)"
+          (keyup.enter)="onSearchSubmit()"
+        />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="onSearchSubmit()">
+        Tìm kiếm
+      </button>
+    </div>
+
+    <!-- Date Range -->
+    <div class="filter-group date-group">
+      <mat-form-field appearance="outline">
+        <mat-label>Từ ngày</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fromPicker"
+          [value]="fromDate()"
+          (dateChange)="onFromDateChange($event.value)"
+        />
+        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Đến ngày</mat-label>
+        <input
+          matInput
+          [matDatepicker]="toPicker"
+          [value]="toDate()"
+          (dateChange)="onToDateChange($event.value)"
+        />
+        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <!-- Group By Selector -->
+    <div class="filter-group">
+      <mat-form-field appearance="outline">
+        <mat-label>Nhóm theo</mat-label>
+        <mat-select [value]="groupBy()" (selectionChange)="onGroupByChange($event.value)">
+          <mat-option *ngFor="let option of groupByOptions" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Clear Filters -->
+    <div class="filter-group">
+      <button mat-stroked-button (click)="clearFilters()">
+        Xóa bộ lọc
+      </button>
+    </div>
+  </div>
+</div>

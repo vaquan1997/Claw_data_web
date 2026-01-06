@@ -6,14 +6,39 @@
   height: 100%;
 }
 
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .chart-title {
   font-size: 1.125rem;
   font-weight: 600;
   color: #111827;
-  margin-bottom: 1.5rem;
+  margin: 0;
 }
 
 .chart-wrapper {
   height: 300px;
   position: relative;
+}
+
+// Responsive styles
+@media (max-width: 767px) {
+  .chart-container {
+    padding: 1rem;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+  }
 }
