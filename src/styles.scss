@@ -75,3 +75,30 @@ button:disabled {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Material Snackbar Customization */
+.success-snackbar {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-label {
+    color: white !important;
+  }
+  
+  .mat-mdc-button {
+    color: white !important;
+  }
+}
+
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-label {
+    color: white !important;
+  }
+  
+  .mat-mdc-button {
+    color: white !important;
+  }
+}

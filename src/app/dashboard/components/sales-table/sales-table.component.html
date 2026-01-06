@@ -35,13 +35,31 @@
       <!-- Customer Name Column -->
       <ng-container matColumnDef="customerName">
         <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['customerName'] }}</th>
-        <td mat-cell *matCellDef="let order">{{ order.customerName }}</td>
+        <td mat-cell *matCellDef="let order">
+          <span *ngIf="!isEditing(order.id)">{{ order.customerName }}</span>
+          <input
+            *ngIf="isEditing(order.id)"
+            type="text"
+            class="edit-input"
+            [(ngModel)]="editForm.customerName"
+            placeholder="Tên khách hàng"
+          />
+        </td>
       </ng-container>
 
       <!-- Phone Column -->
       <ng-container matColumnDef="phone">
         <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['phone'] }}</th>
-        <td mat-cell *matCellDef="let order">{{ order.phone }}</td>
+        <td mat-cell *matCellDef="let order">
+          <span *ngIf="!isEditing(order.id)">{{ order.phone }}</span>
+          <input
+            *ngIf="isEditing(order.id)"
+            type="text"
+            class="edit-input"
+            [(ngModel)]="editForm.phone"
+            placeholder="Số điện thoại"
+          />
+        </td>
       </ng-container>
 
       <!-- Product Name Column -->
@@ -81,6 +99,7 @@
         <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['noteStatus'] }}</th>
         <td mat-cell *matCellDef="let order">
           <mat-select
+            *ngIf="!isEditing(order.id)"
             class="status-select"
             [ngClass]="getStatusBadgeClass(order.noteStatus)"
             [value]="order.noteStatus"
@@ -91,6 +110,60 @@
               <span [style.color]="status.color">{{ status.label }}</span>
             </mat-option>
           </mat-select>
+          
+          <mat-select
+            *ngIf="isEditing(order.id)"
+            class="status-select edit-select"
+            [(ngModel)]="editForm.saleStatus"
+          >
+            <mat-option *ngFor="let status of statusOptions" [value]="status.apiValue">
+              <span [style.color]="status.color">{{ status.label }}</span>
+            </mat-option>
+          </mat-select>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['actions'] }}</th>
+        <td mat-cell *matCellDef="let order" class="actions-cell">
+          <div class="action-buttons">
+            <!-- View Mode Buttons -->
+            <button
+              *ngIf="!isEditing(order.id)"
+              mat-icon-button
+              color="primary"
+              (click)="startEdit(order)"
+              [disabled]="editingRowId !== null"
+              matTooltip="Chỉnh sửa"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <!-- Edit Mode Buttons -->
+            <ng-container *ngIf="isEditing(order.id)">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="saveEdit(order)"
+                [disabled]="isSaving(order.id)"
+                matTooltip="Lưu"
+              >
+                <mat-spinner *ngIf="isSaving(order.id)" diameter="20"></mat-spinner>
+                <mat-icon *ngIf="!isSaving(order.id)">save</mat-icon>
+              </button>
+              
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="cancelEdit()"
+                [disabled]="isSaving(order.id)"
+                matTooltip="Hủy"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </ng-container>
+          </div>
         </td>
       </ng-container>
 
