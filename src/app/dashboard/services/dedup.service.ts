@@ -46,4 +46,22 @@ export class DedupService {
   searchByPhone(phone: string): Observable<CustomerByPhoneResponse> {
     return this.http.get<CustomerByPhoneResponse>(`${this.apiUrl}/row/by-phone/${phone}`);
   }
+
+  /**
+   * Update customer/sales record by ID
+   * @param id - Record ID
+   * @param data - Data to update (with Vietnamese field names)
+   */
+  updateById(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/row/${id}`, data);
+  }
+
+  /**
+   * Update customer/sales record by phone number
+   * @param phone - Phone number
+   * @param data - Data to update (with Vietnamese field names)
+   */
+  updateByPhone(phone: string, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/row/by-phone/${phone}`, data);
+  }
 }
