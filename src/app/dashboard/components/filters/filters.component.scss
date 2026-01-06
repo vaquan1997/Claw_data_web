@@ -1,0 +1,87 @@
+.filters-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.filter-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+
+  mat-form-field {
+    min-width: 200px;
+  }
+
+  button {
+    height: 56px;
+  }
+}
+
+.search-group {
+  flex: 1;
+  min-width: 300px;
+
+  .search-field {
+    flex: 1;
+  }
+}
+
+.date-group {
+  display: flex;
+  gap: 0.5rem;
+
+  mat-form-field {
+    width: 180px;
+  }
+}
+
+// Responsive styles
+@media (max-width: 1199px) {
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-group,
+  .search-group,
+  .date-group {
+    width: 100%;
+  }
+
+  .filter-group mat-form-field {
+    flex: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .filters-container {
+    padding: 1rem;
+  }
+
+  .date-group {
+    flex-direction: column;
+    width: 100%;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .filter-group {
+    flex-direction: column;
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
+}

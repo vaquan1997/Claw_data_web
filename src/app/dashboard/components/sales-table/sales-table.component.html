@@ -32,16 +32,16 @@
   <!-- Data Table -->
   <div *ngIf="!loading && salesData.length > 0" class="table-wrapper">
     <table mat-table [dataSource]="salesData" class="sales-table">
-      <!-- Order Code Column -->
-      <ng-container matColumnDef="orderCode">
-        <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['orderCode'] }}</th>
-        <td mat-cell *matCellDef="let order">{{ order.orderCode }}</td>
-      </ng-container>
-
       <!-- Customer Name Column -->
       <ng-container matColumnDef="customerName">
         <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['customerName'] }}</th>
         <td mat-cell *matCellDef="let order">{{ order.customerName }}</td>
+      </ng-container>
+
+      <!-- Phone Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['phone'] }}</th>
+        <td mat-cell *matCellDef="let order">{{ order.phone }}</td>
       </ng-container>
 
       <!-- Product Name Column -->
@@ -76,34 +76,21 @@
         <td mat-cell *matCellDef="let order">{{ formatDate(order.createdAt) }}</td>
       </ng-container>
 
-      <!-- Payment Method Column -->
-      <ng-container matColumnDef="paymentMethod">
-        <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['paymentMethod'] }}</th>
-        <td mat-cell *matCellDef="let order">{{ getPaymentMethodLabel(order.paymentMethod) }}</td>
-      </ng-container>
-
-      <!-- Sale Status Column -->
-      <ng-container matColumnDef="saleStatus">
-        <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['saleStatus'] }}</th>
-        <td mat-cell *matCellDef="let order">
-          <span class="status-badge">{{ order.saleStatus }}</span>
-        </td>
-      </ng-container>
-
       <!-- Note Status Column -->
       <ng-container matColumnDef="noteStatus">
         <th mat-header-cell *matHeaderCellDef>{{ columnHeaders['noteStatus'] }}</th>
         <td mat-cell *matCellDef="let order">
-          <select
+          <mat-select
             class="status-select"
             [ngClass]="getStatusBadgeClass(order.noteStatus)"
             [value]="order.noteStatus"
-            (change)="onStatusChange(order.id, $any($event.target).value)"
+            (selectionChange)="onStatusChange(order.id, $event.value)"
+            [style.color]="getStatusColor(order.noteStatus)"
           >
-            <option *ngFor="let status of statusOptions" [value]="status.value">
-              {{ status.label }}
-            </option>
-          </select>
+            <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+              <span [style.color]="status.color">{{ status.label }}</span>
+            </mat-option>
+          </mat-select>
         </td>
       </ng-container>
 

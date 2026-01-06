@@ -1,19 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration } from 'chart.js';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ChartConfiguration, ChartType } from 'chart.js';
+import { RevenueData } from '../../../models/revenue.model';
 
 @Component({
   selector: 'app-revenue-chart',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],
+  imports: [CommonModule, BaseChartDirective, MatButtonToggleModule],
   templateUrl: './revenue-chart.component.html',
   styleUrl: './revenue-chart.component.scss'
 })
-export class RevenueChartComponent implements OnInit {
-  @Input() data: any;
+export class RevenueChartComponent implements OnInit, OnChanges {
+  @Input() data: RevenueData[] = [];
 
-  public barChartOptions: ChartConfiguration['options'] = {
+  chartType = signal<ChartType>('bar');
+
+  public chartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -55,7 +59,7 @@ export class RevenueChartComponent implements OnInit {
     }
   };
 
-  public barChartData: ChartConfiguration['data'] = {
+  public chartData: ChartConfiguration['data'] = {
     labels: [],
     datasets: []
   };
@@ -64,23 +68,35 @@ export class RevenueChartComponent implements OnInit {
     this.updateChartData();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      this.updateChartData();
+    }
+  }
+
+  toggleChartType(type: ChartType): void {
+    this.chartType.set(type);
+  }
+
   private updateChartData(): void {
-    const gradient = this.createGradient();
+    const labels = this.data.map(item => item.period);
+    const revenues = this.data.map(item => item.revenue);
     
-    this.barChartData = {
-      labels: this.data?.labels || ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+    this.chartData = {
+      labels: labels.length > 0 ? labels : ['Chưa có dữ liệu'],
       datasets: [
         {
-          data: this.data?.data || [12000000, 19000000, 15000000, 25000000, 22000000, 30000000, 28000000],
-          backgroundColor: gradient,
-          borderRadius: 8,
-          borderSkipped: false
+          label: 'Doanh thu',
+          data: revenues.length > 0 ? revenues : [0],
+          backgroundColor: this.chartType() === 'bar' ? '#3b82f6' : 'rgba(59, 130, 246, 0.2)',
+          borderColor: '#3b82f6',
+          borderWidth: this.chartType() === 'line' ? 2 : 0,
+          borderRadius: this.chartType() === 'bar' ? 8 : 0,
+          borderSkipped: false,
+          tension: 0.4,
+          fill: this.chartType() === 'line'
         }
       ]
     };
-  }
-
-  private createGradient(): string {
-    return '#3b82f6';
   }
 }

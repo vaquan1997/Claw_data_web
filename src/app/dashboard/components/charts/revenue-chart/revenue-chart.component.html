@@ -1,11 +1,17 @@
 <div class="chart-container">
-  <h3 class="chart-title">Doanh thu theo thời gian</h3>
+  <div class="chart-header">
+    <h3 class="chart-title">Doanh thu theo thời gian</h3>
+    <mat-button-toggle-group [value]="chartType()" (change)="toggleChartType($event.value)">
+      <mat-button-toggle value="bar">Cột</mat-button-toggle>
+      <mat-button-toggle value="line">Đường</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
   <div class="chart-wrapper">
     <canvas
       baseChart
-      [data]="barChartData"
-      [options]="barChartOptions"
-      type="bar"
+      [data]="chartData"
+      [options]="chartOptions"
+      [type]="chartType()"
     ></canvas>
   </div>
 </div>

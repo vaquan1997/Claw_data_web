@@ -9,6 +9,12 @@
 
     <!-- Dashboard Content -->
     <div class="content-wrapper">
+      <!-- Filters -->
+      <app-filters
+        (filterChange)="onFilterChange($event)"
+        (searchSubmit)="onSearchChange($event)"
+      ></app-filters>
+
       <!-- KPI Cards -->
       <section class="section">
         <h2 class="section-title">Sale Tác Nghiệp</h2>
@@ -34,6 +40,11 @@
           (statusChange)="onStatusChange($event)"
         ></app-sales-table>
       </section>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage()" class="error-message">
+        {{ errorMessage() }}
+      </div>
     </div>
   </div>
 </div>
