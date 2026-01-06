@@ -12,6 +12,7 @@ import { KPI } from './models/kpi.model';
 import { SaleOrder, NoteStatus } from './models/sale.model';
 import { Customer } from './models/customer.model';
 import { RevenueData, GroupBy } from './models/revenue.model';
+import { RevenueStats } from './models/revenue.model';
 import { DedupService } from './services/dedup.service';
 import { RevenueService } from './services/revenue.service';
 import { catchError, finalize, of } from 'rxjs';
@@ -163,7 +164,7 @@ export class DashboardComponent implements OnInit {
     ]);
   }
 
-  updateKPIsFromRevenue(stats: any): void {
+  updateKPIsFromRevenue(stats: RevenueStats): void {
     this.kpis.set([
       {
         label: 'Tổng doanh thu',
@@ -232,7 +233,7 @@ export class DashboardComponent implements OnInit {
           const customer = response.data;
           const order: SaleOrder = {
             id: customer.id,
-            orderCode: `DH${String(Math.random() * 100000).padStart(5, '0')}`,
+            orderCode: `SEARCH-${customer.id}`,
             customerName: customer.customerName,
             phone: customer.phone,
             productName: customer.product,
