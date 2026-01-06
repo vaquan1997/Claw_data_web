@@ -16,6 +16,7 @@ import { RevenueStats } from './models/revenue.model';
 import { DedupService } from './services/dedup.service';
 import { RevenueService } from './services/revenue.service';
 import { catchError, finalize, of } from 'rxjs';
+import { mapApiToModel, getStatusValue } from './utils/field-mapper';
 import './chart.config';
 
 @Component({
@@ -85,21 +86,24 @@ export class DashboardComponent implements OnInit {
         finalize(() => this.loading.set(false))
       )
       .subscribe(response => {
-        // Transform Customer data to SaleOrder format
-        const orders: SaleOrder[] = response.data.map((customer, index) => ({
-          id: customer.id || `order-${offset + index}`,
-          orderCode: `DH${String(offset + index + 1).padStart(5, '0')}`,
-          customerName: customer.customerName,
-          phone: customer.phone,
-          productName: customer.product,
-          quantity: customer.quantity,
-          unitPrice: customer.unitPrice,
-          totalPrice: customer.quantity * customer.unitPrice,
-          createdAt: customer.createdAt,
-          paymentMethod: 'transfer',
-          saleStatus: 'Hoàn thành',
-          noteStatus: customer.saleNoteStatus || 'new'
-        }));
+        // Transform API data (Vietnamese fields) to SaleOrder format using field mapper
+        const orders: SaleOrder[] = response.data.map((apiData, index) => {
+          const mappedData = mapApiToModel(apiData);
+          return {
+            id: String(mappedData.id || offset + index + 1),
+            orderCode: `DH${String(offset + index + 1).padStart(5, '0')}`,
+            customerName: mappedData.customerName,
+            phone: mappedData.phone,
+            productName: mappedData.product,
+            quantity: mappedData.quantity,
+            unitPrice: mappedData.unitPrice,
+            totalPrice: mappedData.totalPrice,
+            createdAt: mappedData.createdAt,
+            paymentMethod: 'transfer',
+            saleStatus: mappedData.saleStatus,
+            noteStatus: getStatusValue(mappedData.saleStatus) as NoteStatus
+          };
+        });
 
         this.salesData.set(orders);
         this.totalRecords.set(response.total);
@@ -230,20 +234,20 @@ export class DashboardComponent implements OnInit {
       )
       .subscribe(response => {
         if (response.data) {
-          const customer = response.data;
+          const mappedData = mapApiToModel(response.data);
           const order: SaleOrder = {
-            id: customer.id,
-            orderCode: `SEARCH-${customer.id}`,
-            customerName: customer.customerName,
-            phone: customer.phone,
-            productName: customer.product,
-            quantity: customer.quantity,
-            unitPrice: customer.unitPrice,
-            totalPrice: customer.quantity * customer.unitPrice,
-            createdAt: customer.createdAt,
+            id: String(mappedData.id || 'search-1'),
+            orderCode: `SEARCH-${mappedData.id}`,
+            customerName: mappedData.customerName,
+            phone: mappedData.phone,
+            productName: mappedData.product,
+            quantity: mappedData.quantity,
+            unitPrice: mappedData.unitPrice,
+            totalPrice: mappedData.totalPrice,
+            createdAt: mappedData.createdAt,
             paymentMethod: 'transfer',
-            saleStatus: 'Hoàn thành',
-            noteStatus: customer.saleNoteStatus || 'new'
+            saleStatus: mappedData.saleStatus,
+            noteStatus: getStatusValue(mappedData.saleStatus) as NoteStatus
           };
           
           this.salesData.set([order]);
