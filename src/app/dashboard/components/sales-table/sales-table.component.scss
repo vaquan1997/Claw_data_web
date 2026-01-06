@@ -113,8 +113,7 @@
 .sales-table {
   width: 100%;
   min-width: 900px; // Ensure table doesn't squish on mobile
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   
   th {
     background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
