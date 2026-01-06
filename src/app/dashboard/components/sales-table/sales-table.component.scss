@@ -1,7 +1,7 @@
 .table-container {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
@@ -9,38 +9,42 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 1.5rem 2rem;
   border-bottom: 1px solid #e5e7eb;
   gap: 1rem;
   flex-wrap: wrap;
+  background: linear-gradient(to bottom, #fafbfc, #f9fafb);
 }
 
 .table-title {
-  font-size: 1.25rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.35rem;
   font-weight: 600;
   color: #111827;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .search-box {
   display: flex;
-  gap: 0.5rem;
-  max-width: 400px;
+  gap: 0.75rem;
+  max-width: 420px;
   flex: 1;
 }
 
 .search-input {
   flex: 1;
-  padding: 0.625rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9375rem;
+  transition: all 0.25s ease;
 
   &:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
   }
 
   &::placeholder {
@@ -49,17 +53,24 @@
 }
 
 .search-btn {
-  padding: 0.625rem 1.25rem;
-  background: #3b82f6;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 
   &:hover {
-    background: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }
 
@@ -102,25 +113,44 @@
 .sales-table {
   width: 100%;
   min-width: 900px; // Ensure table doesn't squish on mobile
+  border-collapse: collapse;
   
   th {
-    background: #f9fafb;
+    background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+    font-family: 'Roboto', sans-serif;
     font-weight: 600;
     color: #374151;
-    font-size: 0.875rem;
-    padding: 1rem;
+    font-size: 0.9rem;
+    padding: 1rem 1.25rem;
     white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom: 2px solid #e5e7eb;
   }
 
   td {
-    padding: 1rem;
-    color: #111827;
-    font-size: 0.875rem;
+    padding: 1rem 1.25rem;
+    color: #1f2937;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9375rem;
     border-bottom: 1px solid #f3f4f6;
+    line-height: 1.5;
+  }
+
+  tr {
+    transition: background-color 0.15s ease;
   }
 
   tr:hover {
-    background: #f9fafb;
+    background: #f0f7ff;
+  }
+
+  tr:nth-child(even) {
+    background: #fafbfc;
+    
+    &:hover {
+      background: #f0f7ff;
+    }
   }
 }
 
@@ -188,16 +218,17 @@
 
 .edit-input {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #3b82f6;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
 
   &:focus {
     outline: none;
     border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
   }
 }
 
@@ -227,8 +258,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
-  background: #f9fafb;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
   border-top: 2px solid #e5e7eb;
 }
 
@@ -239,13 +270,15 @@
 }
 
 .footer-label {
+  font-family: 'Roboto', sans-serif;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #6b7280;
 }
 
 .footer-value {
-  font-size: 1.25rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #10b981;
 }
