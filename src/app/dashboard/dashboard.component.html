@@ -168,8 +168,8 @@
             <select 
               id="statusFilter" 
               class="filter-select" 
-              [(ngModel)]="selectedStatus"
-              (ngModelChange)="selectedStatus.set($event)">
+              [value]="selectedStatus()"
+              (change)="selectedStatus.set($any($event.target).value)">
               <option *ngFor="let option of statusOptions" [value]="option.value">
                 {{ option.label }}
               </option>
@@ -182,8 +182,8 @@
               type="date" 
               id="fromDate" 
               class="filter-input" 
-              [(ngModel)]="fromDate"
-              (ngModelChange)="fromDate.set($event)">
+              [value]="fromDate()"
+              (change)="fromDate.set($any($event.target).value)">
           </div>
 
           <div class="filter-group">
@@ -192,8 +192,8 @@
               type="date" 
               id="toDate" 
               class="filter-input" 
-              [(ngModel)]="toDate"
-              (ngModelChange)="toDate.set($event)">
+              [value]="toDate()"
+              (change)="toDate.set($any($event.target).value)">
           </div>
 
           <div class="filter-actions">
@@ -218,8 +218,8 @@
             <select 
               id="pageSize" 
               class="page-size-select" 
-              [(ngModel)]="pageSize"
-              (ngModelChange)="pageSize.set($event); onPageSizeChange()">
+              [value]="pageSize()"
+              (change)="pageSize.set(+$any($event.target).value); onPageSizeChange()">
               <option *ngFor="let size of pageSizeOptions" [value]="size">
                 {{ size }}
               </option>
