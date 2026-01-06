@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
@@ -11,7 +11,6 @@ import { ChartConfiguration } from 'chart.js';
   styleUrl: './revenue-chart.component.scss'
 })
 export class RevenueChartComponent implements OnInit {
-  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   @Input() data: any;
 
   public barChartOptions: ChartConfiguration['options'] = {

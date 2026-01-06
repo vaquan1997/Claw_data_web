@@ -34,28 +34,28 @@ export class DashboardComponent implements OnInit {
       value: '$99,560',
       percentageChange: 2.6,
       trend: 'up',
-      comparisonText: 'This month vs last'
+      comparisonText: 'Tháng này so với tháng trước'
     },
     {
       label: 'Tổng đơn hàng',
       value: 35,
       percentageChange: 5.2,
       trend: 'up',
-      comparisonText: 'This month vs last'
+      comparisonText: 'Tháng này so với tháng trước'
     },
     {
       label: 'Tổng khách hàng',
       value: '45,600',
       percentageChange: 1.8,
       trend: 'up',
-      comparisonText: 'This month vs last'
+      comparisonText: 'Tháng này so với tháng trước'
     },
     {
       label: 'Tổng lợi nhuận',
       value: '$60,450',
       percentageChange: -0.5,
       trend: 'down',
-      comparisonText: 'This month vs last'
+      comparisonText: 'Tháng này so với tháng trước'
     }
   ]);
 
