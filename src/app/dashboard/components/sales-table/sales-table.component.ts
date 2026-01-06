@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SaleOrder, NoteStatus } from '../../models/sale.model';
 import { DedupService } from '../../services/dedup.service';
 import { Sale, mapModelToApi, SALE_STATUS_OPTIONS, getApiStatusValue } from '../../utils/field-mapper';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-sales-table',
@@ -145,12 +146,12 @@ export class SalesTableComponent {
       // Determine which API endpoint to use
       if (row.id && row.id !== `order-${row.id}` && row.id !== `SEARCH-${row.id}`) {
         // Use ID-based update
-        await this.dedupService.updateById(parseInt(row.id), apiPayload).toPromise();
+        await firstValueFrom(this.dedupService.updateById(parseInt(row.id), apiPayload));
       } else if (row.phone) {
         // Use phone-based update
-        await this.dedupService.updateByPhone(row.phone, apiPayload).toPromise();
+        await firstValueFrom(this.dedupService.updateByPhone(row.phone, apiPayload));
       } else {
-        throw new Error('Cannot update: No valid ID or phone number');
+        throw new Error('Không thể cập nhật: Không có ID hoặc số điện thoại hợp lệ');
       }
 
       this.snackBar.open('Cập nhật thành công!', 'Đóng', {
