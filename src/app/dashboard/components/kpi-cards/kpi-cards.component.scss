@@ -1,0 +1,122 @@
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.kpi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.kpi-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arrow-icon {
+  font-size: 1.25rem;
+  color: #d1d5db;
+  opacity: 0.5;
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
+
+.kpi-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &.trend-up {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  &.trend-down {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  &.trend-neutral {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+}
+
+.trend-icon {
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.trend-text {
+  font-weight: 600;
+}
+
+.comparison-text {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .kpi-value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}

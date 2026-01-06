@@ -1,262 +1,136 @@
-import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject } from 'rxjs';
-import { takeUntil, finalize } from 'rxjs/operators';
-import { SalesService } from './services/sales.service';
-import {
-  SaleRow,
-  KPIMetrics,
-  StatusDistribution,
-  PerformanceData,
-  TopPerformer,
-  FilterParams,
-  SaleStatus
-} from './models/sale-row.model';
+import { PageEvent } from '@angular/material/paginator';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { HeaderComponent } from './components/header/header.component';
+import { KpiCardsComponent } from './components/kpi-cards/kpi-cards.component';
+import { RevenueChartComponent } from './components/charts/revenue-chart/revenue-chart.component';
+import { CategoryChartComponent } from './components/charts/category-chart/category-chart.component';
+import { SalesTableComponent } from './components/sales-table/sales-table.component';
+import { KPI } from './models/kpi.model';
+import { SaleOrder, NoteStatus } from './models/sale.model';
+import './chart.config';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    SidebarComponent,
+    HeaderComponent,
+    KpiCardsComponent,
+    RevenueChartComponent,
+    CategoryChartComponent,
+    SalesTableComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+export class DashboardComponent implements OnInit {
+  // KPI Data
+  kpis = signal<KPI[]>([
+    {
+      label: 'Tổng doanh thu',
+      value: '$99,560',
+      percentageChange: 2.6,
+      trend: 'up',
+      comparisonText: 'Tháng này so với tháng trước'
+    },
+    {
+      label: 'Tổng đơn hàng',
+      value: 35,
+      percentageChange: 5.2,
+      trend: 'up',
+      comparisonText: 'Tháng này so với tháng trước'
+    },
+    {
+      label: 'Tổng khách hàng',
+      value: '45,600',
+      percentageChange: 1.8,
+      trend: 'up',
+      comparisonText: 'Tháng này so với tháng trước'
+    },
+    {
+      label: 'Tổng lợi nhuận',
+      value: '$60,450',
+      percentageChange: -0.5,
+      trend: 'down',
+      comparisonText: 'Tháng này so với tháng trước'
+    }
+  ]);
 
-  // State signals
-  salesData = signal<SaleRow[]>([]);
-  loading = signal<boolean>(false);
-  error = signal<string | null>(null);
-  
-  // Pagination signals
-  currentPage = signal<number>(0);
-  pageSize = signal<number>(25);
-  totalRecords = signal<number>(0);
-  
-  // Filter signals
-  selectedStatus = signal<SaleStatus | 'all'>('all');
-  fromDate = signal<string>('');
-  toDate = signal<string>('');
-  
-  // Analytics signals
-  kpiMetrics = signal<KPIMetrics>({
-    totalRecords: 0,
-    successCount: 0,
-    failedCount: 0,
-    duplicateCount: 0,
-    pendingCount: 0,
-    totalAmount: 0
+  // Chart Data
+  revenueChartData = signal<any>({
+    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'],
+    data: [12000000, 19000000, 15000000, 25000000, 22000000, 30000000, 28000000]
   });
-  statusDistribution = signal<StatusDistribution[]>([]);
-  performanceData = signal<PerformanceData[]>([]);
-  topPerformers = signal<TopPerformer[]>([]);
-  
-  // Computed values
-  totalPages = computed(() => Math.ceil(this.totalRecords() / this.pageSize()));
-  startRecord = computed(() => this.currentPage() * this.pageSize() + 1);
-  endRecord = computed(() => Math.min((this.currentPage() + 1) * this.pageSize(), this.totalRecords()));
-  isEmpty = computed(() => this.salesData().length === 0 && !this.loading());
-  
-  // Status options for filter
-  statusOptions: Array<{ value: SaleStatus | 'all', label: string }> = [
-    { value: 'all', label: 'Tất cả' },
-    { value: 'success', label: 'Thành công' },
-    { value: 'failed', label: 'Thất bại' },
-    { value: 'duplicate', label: 'Trùng lặp' },
-    { value: 'pending', label: 'Đang chờ' }
-  ];
-  
-  // Page size options
-  pageSizeOptions = [10, 25, 50, 100];
-  
-  // Table columns (will be auto-generated from first data row)
-  tableColumns = signal<string[]>([]);
 
-  constructor(private salesService: SalesService) {}
+  categoryChartData = signal<any>({
+    labels: ['Đã chốt', 'Chưa chốt', 'Chưa mua', 'Đang xử lý'],
+    data: [45, 25, 15, 15]
+  });
+
+  // Sales Data
+  salesData = signal<SaleOrder[]>([]);
+  totalRecords = signal<number>(0);
+  loading = signal<boolean>(false);
+
+  constructor() {}
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadMockData();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  /**
-   * Load sales data from API
-   */
-  loadData(): void {
+  loadMockData(): void {
     this.loading.set(true);
-    this.error.set(null);
     
-    const filters: FilterParams = {
-      limit: this.pageSize(),
-      offset: this.currentPage() * this.pageSize(),
-      status: this.selectedStatus(),
-      fromDate: this.fromDate() || undefined,
-      toDate: this.toDate() || undefined
-    };
+    // Simulate API call with mock data
+    setTimeout(() => {
+      const mockSalesData: SaleOrder[] = Array.from({ length: 25 }, (_, i) => ({
+        id: `ORDER-${1000 + i}`,
+        orderCode: `DH${String(1000 + i).padStart(5, '0')}`,
+        customerName: `Khách hàng ${i + 1}`,
+        productName: `Sản phẩm ${String.fromCharCode(65 + (i % 26))}`,
+        quantity: Math.floor(Math.random() * 10) + 1,
+        unitPrice: Math.floor(Math.random() * 1000000) + 100000,
+        totalPrice: 0, // Will be calculated
+        createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+        paymentMethod: ['cash', 'card', 'transfer', 'cod'][Math.floor(Math.random() * 4)] as any,
+        saleStatus: ['Thành công', 'Đang xử lý', 'Hoàn thành'][Math.floor(Math.random() * 3)],
+        noteStatus: ['pending', 'confirmed', 'rejected'][Math.floor(Math.random() * 3)] as NoteStatus
+      }));
 
-    this.salesService.getSalesData(filters)
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => this.loading.set(false))
-      )
-      .subscribe({
-        next: (response) => {
-          this.salesData.set(response.data);
-          this.totalRecords.set(response.total);
-          
-          // Generate table columns from first row
-          if (response.data.length > 0) {
-            this.tableColumns.set(Object.keys(response.data[0]));
-          }
-          
-          // Calculate analytics
-          this.updateAnalytics(response.data, response.total);
-        },
-        error: (err) => {
-          console.error('Error loading data:', err);
-          this.error.set('Lỗi khi tải dữ liệu. Vui lòng thử lại.');
-        }
+      // Calculate total price for each order
+      mockSalesData.forEach(order => {
+        order.totalPrice = order.unitPrice * order.quantity;
       });
+
+      this.salesData.set(mockSalesData);
+      this.totalRecords.set(100); // Mock total
+      this.loading.set(false);
+    }, 1000);
   }
 
-  /**
-   * Update analytics data
-   */
-  private updateAnalytics(data: SaleRow[], total: number): void {
-    this.kpiMetrics.set(this.salesService.calculateKPIMetrics(data, total));
-    this.statusDistribution.set(this.salesService.getStatusDistribution(data));
-    this.performanceData.set(this.salesService.getPerformanceOverTime(data));
-    this.topPerformers.set(this.salesService.getTopPerformers(data));
+  onPageChange(event: PageEvent): void {
+    console.log('Page changed:', event);
+    // Here you would typically fetch new data based on the page
+    this.loadMockData();
   }
 
-  /**
-   * Apply filters
-   */
-  applyFilters(): void {
-    this.currentPage.set(0);
-    this.loadData();
+  onSearchChange(query: string): void {
+    console.log('Search query:', query);
+    // Here you would typically filter or fetch data based on the search query
   }
 
-  /**
-   * Clear all filters
-   */
-  clearFilters(): void {
-    this.selectedStatus.set('all');
-    this.fromDate.set('');
-    this.toDate.set('');
-    this.currentPage.set(0);
-    this.loadData();
-  }
-
-  /**
-   * Change page size
-   */
-  onPageSizeChange(): void {
-    this.currentPage.set(0);
-    this.loadData();
-  }
-
-  /**
-   * Go to specific page
-   */
-  goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages()) {
-      this.currentPage.set(page);
-      this.loadData();
-    }
-  }
-
-  /**
-   * Get page numbers to display
-   */
-  getPageNumbers(): number[] {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const pages: number[] = [];
-    
-    // Show max 5 pages around current page
-    let start = Math.max(0, current - 2);
-    let end = Math.min(total - 1, current + 2);
-    
-    // Adjust if near boundaries
-    if (current <= 2) {
-      end = Math.min(4, total - 1);
-    }
-    if (current >= total - 3) {
-      start = Math.max(0, total - 5);
-    }
-    
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    
-    return pages;
-  }
-
-  /**
-   * Get status badge class
-   */
-  getStatusClass(status: string): string {
-    const statusMap: Record<string, string> = {
-      success: 'badge-success',
-      failed: 'badge-failed',
-      duplicate: 'badge-duplicate',
-      pending: 'badge-pending'
-    };
-    return statusMap[status] || 'badge-default';
-  }
-
-  /**
-   * Get status label in Vietnamese
-   */
-  getStatusLabel(status: string): string {
-    const statusMap: Record<string, string> = {
-      success: 'Thành công',
-      failed: 'Thất bại',
-      duplicate: 'Trùng lặp',
-      pending: 'Đang chờ'
-    };
-    return statusMap[status] || status;
-  }
-
-  /**
-   * Format currency
-   */
-  formatCurrency(amount: number): string {
-    return this.salesService.formatCurrency(amount);
-  }
-
-  /**
-   * Format date
-   */
-  formatDate(dateString: string): string {
-    return this.salesService.formatDate(dateString);
-  }
-
-  /**
-   * Get trend indicator
-   */
-  getTrendIndicator(value: number): string {
-    if (value > 0) return '↑';
-    if (value < 0) return '↓';
-    return '→';
-  }
-
-  /**
-   * Calculate percentage for status distribution chart
-   */
-  getPercentage(count: number, total: number): number {
-    return total > 0 ? (count / total) * 100 : 0;
-  }
-
-  /**
-   * Retry loading data after error
-   */
-  retryLoad(): void {
-    this.loadData();
+  onStatusChange(event: { orderId: string; status: NoteStatus }): void {
+    console.log('Status changed:', event);
+    // Update the order status in the data
+    this.salesData.update(data => 
+      data.map(order => 
+        order.id === event.orderId 
+          ? { ...order, noteStatus: event.status }
+          : order
+      )
+    );
   }
 }

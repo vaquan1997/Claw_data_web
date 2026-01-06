@@ -1,0 +1,18 @@
+<div class="kpi-grid">
+  <div *ngFor="let kpi of kpis" class="kpi-card">
+    <div class="kpi-header">
+      <span class="kpi-label">{{ kpi.label }}</span>
+      <span class="arrow-icon">➜</span>
+    </div>
+    
+    <div class="kpi-value">{{ kpi.value }}</div>
+    
+    <div class="kpi-footer">
+      <span class="trend-badge" [ngClass]="getTrendClass(kpi.trend)">
+        <span class="trend-icon">{{ getTrendIcon(kpi.trend) }}</span>
+        <span class="trend-text">{{ kpi.percentageChange > 0 ? '+' : '' }}{{ kpi.percentageChange }}%</span>
+      </span>
+      <span class="comparison-text">{{ kpi.comparisonText }}</span>
+    </div>
+  </div>
+</div>

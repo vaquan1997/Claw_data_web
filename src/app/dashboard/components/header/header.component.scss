@@ -1,0 +1,116 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.2s ease;
+
+  &:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: white;
+  }
+}
+
+.search-icon {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #111827;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: white;
+    border-color: #d1d5db;
+  }
+}
+
+.date-icon {
+  font-size: 1.125rem;
+}
+
+.date-text {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.user-avatar {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .search-box {
+    max-width: 250px;
+  }
+
+  .date-filter {
+    padding: 0.5rem;
+
+    .date-text {
+      display: none;
+    }
+  }
+}
