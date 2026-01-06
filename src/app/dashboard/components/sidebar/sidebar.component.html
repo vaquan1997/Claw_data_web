@@ -1,0 +1,24 @@
+<aside class="sidebar" [class.collapsed]="collapsed()">
+  <div class="sidebar-header">
+    <div class="logo" *ngIf="!collapsed()">
+      <span class="logo-icon">🏢</span>
+      <span class="logo-text">Sales Pro</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <span>{{ collapsed() ? '☰' : '✕' }}</span>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.route"
+      class="nav-item"
+      [class.active]="item.active"
+      [title]="item.label"
+    >
+      <span class="nav-icon">{{ item.icon }}</span>
+      <span class="nav-label" *ngIf="!collapsed()">{{ item.label }}</span>
+    </a>
+  </nav>
+</aside>
