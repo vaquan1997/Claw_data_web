@@ -1,0 +1,10 @@
+
+  <span class="tag" [class]="'tag--' + color + ' tag--' + size">
+  <span class="tag__content">{{ content }}</span>
+  @if (closable) {
+    <button class="tag__close" (click)="onClose($event)" aria-label="Close">
+      ×
+    </button>
+  }
+</span>
+
