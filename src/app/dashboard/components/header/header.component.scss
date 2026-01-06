@@ -39,7 +39,8 @@
   border: none;
   background: none;
   outline: none;
-  font-size: 0.875rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9375rem;
   color: #111827;
 
   &::placeholder {
@@ -75,7 +76,8 @@
 }
 
 .date-text {
-  font-size: 0.875rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9375rem;
   color: #374151;
   font-weight: 500;
 }
